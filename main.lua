@@ -18,7 +18,7 @@ function love.update(dt)
     if UPDATE then
         local x_val = pos_x + X
         local y_val = pos_y + Y
-        if x_val > 0 and x_val < 7 and y_val > 0 and y_val < 7 then
+        if x_val >= 0 and x_val <= 7 and y_val >= 0 and y_val <= 7 then
             pos_x = x_val
             pos_y = y_val
         end
@@ -34,10 +34,11 @@ function love.draw()
             else
                 love.graphics.setColor(black)
             end
-            love.graphics.rectangle("fill", i * 100, j * 100, 100, 100)
+            love.graphics.rectangle("fill", i * 100, j * 100 + 100, 100, 100)
         end
     end
-    love.graphics.draw(image, pos_x*100, pos_y*100)
+    love.graphics.draw(image, pos_x*100, pos_y*100 + 100)
+    -- love.graphics.draw(image, 0, 100)
 end
 
 DIRECTIONS = {
