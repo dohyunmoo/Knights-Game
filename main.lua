@@ -5,22 +5,37 @@ CURRENT_COMBINATION = "nomove"
 UPDATE = false
 
 function love.load()
-    pos_x = 4
-    pos_y = 4
+    pos_x_knight = 4
+    pos_y_knight = 4
+    pos_x_pawn = 3
+    pos_y_pawn = 2
+
+    score = 0
 
     white = {1, 1, 1}
     black = {0, 0, 0}
 
-    image = love.graphics.newImage("assets/knight.png")
+    image_knight = love.graphics.newImage("assets/knight.png")
+    image_pawn = love.graphics.newImage("assets/pawn.png")
 end
 
 function love.update(dt)
     if UPDATE then
-        local x_val = pos_x + X
-        local y_val = pos_y + Y
+        local x_val = pos_x_knight + X
+        local y_val = pos_y_knight + Y
         if x_val >= 0 and x_val <= 7 and y_val >= 0 and y_val <= 7 then
-            pos_x = x_val
-            pos_y = y_val
+            pos_x_knight = x_val
+            pos_y_knight = y_val
+
+            if pos_x_knight == pos_x_pawn and pos_y_knight == pos_y_pawn then
+                score = score + 1
+                pos_x_pawn = math.random(0, 7)
+                pos_y_pawn = math.random(0, 7)
+                while pos_x_pawn ~= pos_x_knight and pos_y_pawn ~= pos_y_knight do
+                    pos_x_pawn = math.random(0, 7)
+                    pos_y_pawn = math.random(0, 7)
+                end
+            end
         end
     end
     UPDATE = false
@@ -37,7 +52,8 @@ function love.draw()
             love.graphics.rectangle("fill", i * 100, j * 100 + 100, 100, 100)
         end
     end
-    love.graphics.draw(image, pos_x*100, pos_y*100 + 100)
+    love.graphics.draw(image_knight, pos_x_knight*100, pos_y_knight*100 + 100)
+    love.graphics.draw(image_pawn, pos_x_pawn*100, pos_y_pawn*100 + 100)
     -- love.graphics.draw(image, 0, 100)
 end
 
