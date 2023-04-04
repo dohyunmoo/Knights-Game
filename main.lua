@@ -4,6 +4,8 @@ PREV_PRESSED = ''
 CURRENT_COMBINATION = "nomove"
 UPDATE = false
 
+math.randomseed(os.time()) -- generate random number based on current time
+
 function love.load()
     pos_x_knight = 4
     pos_y_knight = 4
@@ -31,7 +33,7 @@ function love.update(dt)
                 score = score + 1
                 pos_x_pawn = math.random(0, 7)
                 pos_y_pawn = math.random(0, 7)
-                while pos_x_pawn ~= pos_x_knight and pos_y_pawn ~= pos_y_knight do
+                while pos_x_pawn == pos_x_knight and pos_y_pawn == pos_y_knight do
                     pos_x_pawn = math.random(0, 7)
                     pos_y_pawn = math.random(0, 7)
                 end
