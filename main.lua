@@ -3,10 +3,15 @@ X, Y = 0, 0
 PREV_PRESSED = ''
 CURRENT_COMBINATION = "nomove"
 UPDATE = false
+SHAKE = false
+
+local shake_time = 0
+local shake_x = 0
 
 math.randomseed(os.time()) -- generate random number based on current time
 
 function love.load()
+    -- initial spawn coordinates
     pos_x_knight = 4
     pos_y_knight = 4
     pos_x_pawn = 3
@@ -40,6 +45,17 @@ function love.update(dt)
             end
         end
     end
+
+    if SHAKE then
+        if shake_time > 0 then
+            shake_time = shake_time - dt
+            shake_x = 5
+        else
+            shake_x = 0
+            SHAKE = false
+        end
+    end
+
     UPDATE = false
 end
 
@@ -54,9 +70,15 @@ function love.draw()
             love.graphics.rectangle("fill", i * 100, j * 100 + 100, 100, 100)
         end
     end
+
+    love.graphics.push()
+    love.graphics.translate(shake_x, 0)
+
     love.graphics.draw(image_knight, pos_x_knight*100, pos_y_knight*100 + 100)
+    
+    love.graphics.pop()
+    
     love.graphics.draw(image_pawn, pos_x_pawn*100, pos_y_pawn*100 + 100)
-    -- love.graphics.draw(image, 0, 100)
 end
 
 DIRECTIONS = {
@@ -94,6 +116,8 @@ function love.keypressed(key)
             CURRENT_COMBINATION = "rightdown"
         else
             CURRENT_COMBINATION = "nomove"
+            SHAKE = true
+            shake_time = 0.5
         end
         PREV_PRESSED = ''
         UPDATE = true
