@@ -6,11 +6,24 @@ UPDATE = false
 SHAKE = false
 
 BLOCK_WIDTH = 100 -- in pixels
+MAX_TIME_CURRENT_ROUND = 10
 
 local shake_time = 0
 local shake_x = 0
 
 math.randomseed(os.time()) -- generate random number based on current time
+
+DIRECTIONS = {
+    ["upleft"] = { x = -1, y = -2 },
+    ["upright"] = { x = 1, y = -2 },
+    ["leftup"] = { x = -2, y = -1 },
+    ["leftdown"] = { x = -2, y = 1 },
+    ["downleft"] = { x = -1, y = 2 },
+    ["downright"] = { x = 1, y = 2 },
+    ["rightup"] = { x = 2, y = -1 },
+    ["rightdown"] = { x = 2, y = 1 },
+    ["nomove"] = { x = 0, y = 0 }
+}
 
 function love.load()
     -- initial spawn coordinates
@@ -28,6 +41,8 @@ function love.load()
     brown = {0.6, 0.4, 0.2}
     yellow = {1, 1, 0}
 
+    time_left = MAX_TIME_CURRENT_ROUND
+
     image_knight = love.graphics.newImage("assets/knight.png")
     image_pawn = love.graphics.newImage("assets/pawn.png")
 end
@@ -42,6 +57,7 @@ function love.update(dt)
 
             if pos_x_knight == pos_x_pawn and pos_y_knight == pos_y_pawn then
                 score = score + 1
+                reset_timer()
                 pos_x_pawn = math.random(0, 7)
                 pos_y_pawn = math.random(0, 7)
                 while pos_x_pawn == pos_x_knight and pos_y_pawn == pos_y_knight do
@@ -57,6 +73,12 @@ function love.update(dt)
         shake_x = love.math.random(-5, 5)
     else
         shake_x = 0
+    end
+
+    if time_left > 0 then
+        time_left = time_left - dt
+    else
+        -- game over
     end
 
     UPDATE = false
@@ -82,7 +104,7 @@ function love.draw()
     love.graphics.printf("Score: " .. tostring(score), window_width/4, BLOCK_WIDTH/8, window_width/2, "center")
 
     love.graphics.setColor(yellow)
-    love.graphics.rectangle("fill", 0, BLOCK_WIDTH/2, window_width, BLOCK_WIDTH/2)
+    love.graphics.rectangle("fill", 0, BLOCK_WIDTH/2, window_width*(time_left/MAX_TIME_CURRENT_ROUND), BLOCK_WIDTH/2)
 
     -- love.graphics.push()
     -- love.graphics.translate(shake_x, 0)
@@ -93,18 +115,6 @@ function love.draw()
     
     love.graphics.draw(image_pawn, pos_x_pawn*BLOCK_WIDTH, pos_y_pawn*BLOCK_WIDTH + BLOCK_WIDTH)
 end
-
-DIRECTIONS = {
-    ["upleft"] = { x = -1, y = -2 },
-    ["upright"] = { x = 1, y = -2 },
-    ["leftup"] = { x = -2, y = -1 },
-    ["leftdown"] = { x = -2, y = 1 },
-    ["downleft"] = { x = -1, y = 2 },
-    ["downright"] = { x = 1, y = 2 },
-    ["rightup"] = { x = 2, y = -1 },
-    ["rightdown"] = { x = 2, y = 1 },
-    ["nomove"] = { x = 0, y = 0 }
-}
 
 function love.keypressed(key)
 
@@ -136,4 +146,17 @@ function love.keypressed(key)
     end
 
     X, Y = DIRECTIONS[CURRENT_COMBINATION].x, DIRECTIONS[CURRENT_COMBINATION].y
+end
+
+function reset_timer()
+    if score < 5 then
+        MAX_TIME_CURRENT_ROUND = 10
+    elseif score < 10 then
+        MAX_TIME_CURRENT_ROUND = 7
+    elseif score < 15 then
+        MAX_TIME_CURRENT_ROUND = 5
+    else
+        MAX_TIME_CURRENT_ROUND = 3
+    end
+    time_left = MAX_TIME_CURRENT_ROUND
 end
