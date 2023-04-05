@@ -5,6 +5,8 @@ CURRENT_COMBINATION = "nomove"
 UPDATE = false
 SHAKE = false
 
+BLOCK_WIDTH = 100 -- in pixels
+
 local shake_time = 0
 local shake_x = 0
 
@@ -17,10 +19,14 @@ function love.load()
     pos_x_pawn = 3
     pos_y_pawn = 2
 
+    font = love.graphics.newFont(24)
+
     score = 0
 
     white = {1, 1, 1}
     black = {0, 0, 0}
+    brown = {0.6, 0.4, 0.2}
+    yellow = {1, 1, 0}
 
     image_knight = love.graphics.newImage("assets/knight.png")
     image_pawn = love.graphics.newImage("assets/pawn.png")
@@ -46,20 +52,21 @@ function love.update(dt)
         end
     end
 
-    if SHAKE then
-        if shake_time > 0 then
-            shake_time = shake_time - dt
-            shake_x = 5
-        else
-            shake_x = 0
-            SHAKE = false
-        end
+    if shake_time > 0 then
+        shake_time = shake_time - dt
+        shake_x = love.math.random(-5, 5)
+    else
+        shake_x = 0
     end
 
     UPDATE = false
 end
 
 function love.draw()
+    love.graphics.setFont(font)
+
+    local window_width = love.graphics.getWidth()
+
     for i = 0, 7 do
         for j = 0, 7 do
             if (i + j) % 2 == 0 then
@@ -67,18 +74,24 @@ function love.draw()
             else
                 love.graphics.setColor(black)
             end
-            love.graphics.rectangle("fill", i * 100, j * 100 + 100, 100, 100)
+            love.graphics.rectangle("fill", i * BLOCK_WIDTH, j * BLOCK_WIDTH + BLOCK_WIDTH, BLOCK_WIDTH, BLOCK_WIDTH)
         end
     end
 
-    love.graphics.push()
-    love.graphics.translate(shake_x, 0)
+    love.graphics.setColor(white)
+    love.graphics.printf("Score: " .. tostring(score), window_width/4, BLOCK_WIDTH/8, window_width/2, "center")
 
-    love.graphics.draw(image_knight, pos_x_knight*100, pos_y_knight*100 + 100)
+    love.graphics.setColor(yellow)
+    love.graphics.rectangle("fill", 0, BLOCK_WIDTH/2, window_width, BLOCK_WIDTH/2)
+
+    -- love.graphics.push()
+    -- love.graphics.translate(shake_x, 0)
+    love.graphics.setColor(white)
+    love.graphics.draw(image_knight, pos_x_knight*BLOCK_WIDTH, pos_y_knight*BLOCK_WIDTH + BLOCK_WIDTH)
     
-    love.graphics.pop()
+    -- love.graphics.pop()
     
-    love.graphics.draw(image_pawn, pos_x_pawn*100, pos_y_pawn*100 + 100)
+    love.graphics.draw(image_pawn, pos_x_pawn*BLOCK_WIDTH, pos_y_pawn*BLOCK_WIDTH + BLOCK_WIDTH)
 end
 
 DIRECTIONS = {
@@ -116,7 +129,6 @@ function love.keypressed(key)
             CURRENT_COMBINATION = "rightdown"
         else
             CURRENT_COMBINATION = "nomove"
-            SHAKE = true
             shake_time = 0.5
         end
         PREV_PRESSED = ''
