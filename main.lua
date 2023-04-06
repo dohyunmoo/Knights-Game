@@ -38,6 +38,31 @@ function love.load()
 
     image_knight = love.graphics.newImage("assets/knight.png")
     image_pawn = love.graphics.newImage("assets/pawn.png")
+    -- set the background color
+    love.graphics.setBackgroundColor(255, 255, 255)
+  
+    -- load the font
+    font = love.graphics.newFont(24)
+  
+    -- set the text color
+    love.graphics.setColor(0, 0, 0)
+  
+    -- load the image
+    image2 = love.graphics.newImage("assets/man.png")
+end
+
+function love.loadGame()
+    reset_game()
+    
+    -- font = love.graphics.newFont(24)
+
+    -- white = {1, 1, 1}
+    -- black = {0, 0, 0}
+    -- brown = {0.6, 0.4, 0.2}
+    -- yellow = {1, 1, 0}
+
+    -- image_knight = love.graphics.newImage("assets/knight.png")
+    -- image_pawn = love.graphics.newImage("assets/pawn.png")
 end
 
 function love.update(dt)
@@ -77,7 +102,21 @@ function love.update(dt)
     UPDATE = false
 end
 
+function love.mousepressed(key)
+    -- start the game when a key is pressed
+    love.loadGame()
+  end
+
 function love.draw()
+    love.graphics.draw(image2, love.graphics.getWidth()/2 - image2:getWidth()/2, love.graphics.getHeight()/2 - image2:getHeight()/2)
+
+    -- draw the title text
+    love.graphics.setFont(font)
+    love.graphics.print("Welcome to my game", love.graphics.getWidth()/2 - font:getWidth("Welcome to my game")/2, love.graphics.getHeight()/2 - image2:getHeight()/2 - font:getHeight() - 20)
+
+    -- draw the start message
+    love.graphics.print("Press any key to start", love.graphics.getWidth()/2 - font:getWidth("Press any key to start")/2, love.graphics.getHeight()/2 + image2:getHeight()/2 + 20)
+
     love.graphics.setFont(font)
 
     local window_width = love.graphics.getWidth()
