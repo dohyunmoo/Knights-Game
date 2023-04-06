@@ -1,3 +1,5 @@
+require("game/util")
+
 X, Y = 0, 0
 
 PREV_PRESSED = ''
@@ -6,7 +8,6 @@ UPDATE = false
 SHAKE = false
 
 BLOCK_WIDTH = 100 -- in pixels
-MAX_TIME_CURRENT_ROUND = 10
 
 local shake_time = 0
 local shake_x = 0
@@ -26,22 +27,14 @@ DIRECTIONS = {
 }
 
 function love.load()
-    -- initial spawn coordinates
-    pos_x_knight = 4
-    pos_y_knight = 4
-    pos_x_pawn = 3
-    pos_y_pawn = 2
-
+    reset_game()
+    
     font = love.graphics.newFont(24)
-
-    score = 0
 
     white = {1, 1, 1}
     black = {0, 0, 0}
     brown = {0.6, 0.4, 0.2}
     yellow = {1, 1, 0}
-
-    time_left = MAX_TIME_CURRENT_ROUND
 
     image_knight = love.graphics.newImage("assets/knight.png")
     image_pawn = love.graphics.newImage("assets/pawn.png")
@@ -57,9 +50,9 @@ function love.update(dt)
 
             if pos_x_knight == pos_x_pawn and pos_y_knight == pos_y_pawn then
                 score = score + 1
-                reset_timer()
                 pos_x_pawn = math.random(0, 7)
                 pos_y_pawn = math.random(0, 7)
+                reset_timer()
                 while pos_x_pawn == pos_x_knight and pos_y_pawn == pos_y_knight do
                     pos_x_pawn = math.random(0, 7)
                     pos_y_pawn = math.random(0, 7)
@@ -78,7 +71,7 @@ function love.update(dt)
     if time_left > 0 then
         time_left = time_left - dt
     else
-        -- game over
+        reset_game()
     end
 
     UPDATE = false
@@ -146,17 +139,4 @@ function love.keypressed(key)
     end
 
     X, Y = DIRECTIONS[CURRENT_COMBINATION].x, DIRECTIONS[CURRENT_COMBINATION].y
-end
-
-function reset_timer()
-    if score < 5 then
-        MAX_TIME_CURRENT_ROUND = 10
-    elseif score < 10 then
-        MAX_TIME_CURRENT_ROUND = 7
-    elseif score < 15 then
-        MAX_TIME_CURRENT_ROUND = 5
-    else
-        MAX_TIME_CURRENT_ROUND = 3
-    end
-    time_left = MAX_TIME_CURRENT_ROUND
 end
