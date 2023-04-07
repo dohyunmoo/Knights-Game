@@ -21,4 +21,13 @@ function reset_game()
 
     score = 0
     time_left = MAX_TIME_CURRENT_ROUND
+
+    shake_time = 0
+    shake_x = 0
+
+    math.randomseed(os.time()) -- generate random number based on current time
+end
+
+function shake() 
+    shake_time = 0.2
 end
