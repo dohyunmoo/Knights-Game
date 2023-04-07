@@ -1,5 +1,5 @@
 WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 900
+WINDOW_HEIGHT = WINDOW_WIDTH + 100
 
 function love.conf(t)
     t.window.width = WINDOW_WIDTH

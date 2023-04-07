@@ -10,18 +10,27 @@ SHAKE = false
 
 BLOCK_WIDTH = 100 -- in pixels
 
+local tenth = WINDOW_WIDTH/10
+
 local easy_button = {
-    x = WINDOW_WIDTH/4,
+    x = tenth,
     y = WINDOW_HEIGHT/4,
-    w = WINDOW_WIDTH/2,
-    h = WINDOW_HEIGHT/2
+    w = 2 * tenth,
+    h = 2 * tenth
 }
 
 local medium_button = {
-    x = WINDOW_WIDTH/4,
+    x = 4 * tenth,
     y = WINDOW_HEIGHT/4,
-    w = WINDOW_WIDTH/2,
-    h = WINDOW_HEIGHT/2
+    w = 2 * tenth,
+    h = 2 * tenth
+}
+
+local hard_button = {
+    x = 7 * tenth,
+    y = WINDOW_HEIGHT/4,
+    w = 2 * tenth,
+    h = 2 * tenth
 }
 
 local isGameStarted = false
@@ -39,6 +48,7 @@ DIRECTIONS = {
 }
 
 function love.load()
+    load_image()
     reset_game()
     
     font = love.graphics.newFont(24)
@@ -48,44 +58,26 @@ function love.load()
     brown = {0.6, 0.4, 0.2}
     yellow = {1, 1, 0}
 
-    love.graphics.setBackgroundColor(black)
-
-    image_knight = love.graphics.newImage("assets/knight.png")
-    image_pawn = love.graphics.newImage("assets/pawn.png")
     -- set the background color
-    love.graphics.setBackgroundColor(255, 255, 255)
-  
-    -- load the font
-    font = love.graphics.newFont(24)
+    love.graphics.setBackgroundColor(white)
   
     -- set the text color
     love.graphics.setColor(black)
-  
-    -- load the image
-    image2 = love.graphics.newImage("assets/man.png")
 end
 
 function love.update(dt)
     if UPDATE then
         local x_val = pos_x_knight + X
         local y_val = pos_y_knight + Y
-        if x_val >= 0 and x_val <= WINDOW_WIDTH / BLOCK_WIDTH and y_val >= 0 and y_val <= WINDOW_HEIGHT / BLOCK_WIDTH then
+        if x_val >= 0 and x_val <= WINDOW_WIDTH / BLOCK_WIDTH - 1 and y_val >= 1 and y_val <= WINDOW_WIDTH / BLOCK_WIDTH then
             pos_x_knight = x_val
             pos_y_knight = y_val
 
-            if pos_x_knight == pos_x_pawn and pos_y_knight == pos_y_pawn then
-                score = score + 1
-                pos_x_pawn = math.random(0, WINDOW_WIDTH / BLOCK_WIDTH)
-                pos_y_pawn = math.random(0, WINDOW_HEIGHT / BLOCK_WIDTH)
-                reset_timer()
-                while pos_x_pawn == pos_x_knight and pos_y_pawn == pos_y_knight do
-                    pos_x_pawn = math.random(0, WINDOW_WIDTH / BLOCK_WIDTH)
-                    pos_y_pawn = math.random(0, WINDOW_HEIGHT / BLOCK_WIDTH)
-                end
+            if pos_x_knight == pos_x_enemy and pos_y_knight == pos_y_enemy then
+                captured() -- captured actions
             end
         else
-            -- if move cannot be made, the knight shakes
-            shake()
+            shake() -- if move cannot be made, the knight shakes
         end
     end
 
@@ -108,24 +100,34 @@ end
 
 function love.mousepressed(x, y, button)
     if not isGameStarted then
-        if button == 1 and x >= startButton.x and x <= startButton.x + startButton.w and y >= startButton.y and y <= startButton.y + startButton.h then
+        if button == 1 and x >= easy_button.x and x <= easy_button.x + easy_button.w and y >= easy_button.y and y <= easy_button.y + easy_button.h then
+            isGameStarted = true
+            time_left = MAX_TIME_CURRENT_ROUND
+        elseif button == 1 and x >= medium_button.x and x <= medium_button.x + medium_button.w and y >= medium_button.y and y <= medium_button.y + medium_button.h then
+            isGameStarted = true
+            time_left = MAX_TIME_CURRENT_ROUND
+        elseif button == 1 and x >= hard_button.x and x <= hard_button.x + hard_button.w and y >= hard_button.y and y <= hard_button.y + hard_button.h then
             isGameStarted = true
             time_left = MAX_TIME_CURRENT_ROUND
         end
     end
-  end
+end
 
 function love.draw()
     if not isGameStarted then
-        love.graphics.rectangle("line", startButton.x, startButton.y, startButton.w, startButton.h)
-        love.graphics.print("Start", startButton.x + startButton.w / 2 - 20, startButton.y + startButton.h / 2 - 10)
-        love.graphics.print("Welcome to My Game", 100, 100)
+        love.graphics.setBackgroundColor(white)
+        love.graphics.setColor(black)
+        love.graphics.setFont(font)
+        love.graphics.rectangle("line", easy_button.x, easy_button.y, easy_button.w, easy_button.h)
+        love.graphics.rectangle("line", medium_button.x, medium_button.y, medium_button.w, medium_button.h)
+        love.graphics.rectangle("line", hard_button.x, hard_button.y, hard_button.w, hard_button.h)
+        love.graphics.print("easy mode", easy_button.x + easy_button.w / 2 - 20, easy_button.y + easy_button.h / 2 - 10)
+        love.graphics.print("MEDIUM mode", medium_button.x + medium_button.w / 2 - 20, medium_button.y + medium_button.h / 2 - 10)
+        love.graphics.print("HARD MODE", hard_button.x + hard_button.w / 2 - 20, hard_button.y + hard_button.h / 2 - 10)
     else
         love.graphics.clear()
         love.graphics.setFont(font)
-    
-        local window_width = love.graphics.getWidth()
-    
+        
         for i = 0, 7 do
             for j = 0, 7 do
                 if (i + j) % 2 == 0 then
@@ -138,19 +140,19 @@ function love.draw()
         end
     
         love.graphics.setColor(white)
-        love.graphics.printf("Score: " .. tostring(score), window_width/4, BLOCK_WIDTH/8, window_width/2, "center")
+        love.graphics.printf("Score: " .. tostring(score), WINDOW_WIDTH / 4, BLOCK_WIDTH / 8, WINDOW_WIDTH/2, "center")
     
         love.graphics.setColor(yellow)
-        love.graphics.rectangle("fill", 0, BLOCK_WIDTH/2, window_width * (time_left / MAX_TIME_CURRENT_ROUND), BLOCK_WIDTH/2)
+        love.graphics.rectangle("fill", 0, BLOCK_WIDTH / 2, WINDOW_WIDTH * (time_left / MAX_TIME_CURRENT_ROUND), BLOCK_WIDTH / 2)
     
         love.graphics.push()
         love.graphics.translate(shake_x, 0)
         love.graphics.setColor(white)
-        love.graphics.draw(image_knight, pos_x_knight * BLOCK_WIDTH, pos_y_knight * BLOCK_WIDTH + BLOCK_WIDTH)
+        love.graphics.draw(image_knight, pos_x_knight * BLOCK_WIDTH, pos_y_knight * BLOCK_WIDTH)
         love.graphics.pop()
         
         love.graphics.setColor(white)
-        love.graphics.draw(image_pawn, pos_x_pawn * BLOCK_WIDTH, pos_y_pawn * BLOCK_WIDTH + BLOCK_WIDTH)
+        love.graphics.draw(enemy, pos_x_enemy * BLOCK_WIDTH, pos_y_enemy * BLOCK_WIDTH)
     end
 end
 
