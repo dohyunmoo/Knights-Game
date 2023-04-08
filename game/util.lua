@@ -1,3 +1,9 @@
+require("conf")
+
+WINDOW_WIDTH = BASE_WINDOW_WIDTH
+WINDOW_HEIGHT = BASE_WINDOW_HEIGHT
+BASE_BLOCK_WIDTH = 100
+
 function reset_timer()
     if score < 5 then
         MAX_TIME_CURRENT_ROUND = 10
@@ -18,6 +24,8 @@ function reset_game()
     pos_x_enemy = 4
     pos_y_enemy = 4
     MAX_TIME_CURRENT_ROUND = 10
+    
+    isGameStarted = false
 
     enemy = image_pawn
 
@@ -34,7 +42,18 @@ function reset_game()
     UPDATE = false
     SHAKE = false
 
+    mode = "medium"
+    BLOCK_WIDTH = BASE_BLOCK_WIDTH
+    block_count = WINDOW_WIDTH/BLOCK_WIDTH
+
+    WINDOW_WIDTH = BASE_WINDOW_WIDTH
+    WINDOW_HEIGHT = BASE_WINDOW_HEIGHT
+
     math.randomseed(os.time()) -- generate random number based on current time
+end
+
+function reset_screen()
+    love.window.setMode(BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, {resizable=false}) -- return to base size
 end
 
 function shake() 
@@ -80,4 +99,28 @@ function captured()
         pos_x_enemy = math.random(0, WINDOW_WIDTH / BLOCK_WIDTH - 1)
         pos_y_enemy = math.random(1, WINDOW_WIDTH / BLOCK_WIDTH)
     end
+end
+
+function mode_change(changed_mode)
+    if changed_mode == "easy" then
+        BLOCK_WIDTH = 120 -- in pixels
+        WINDOW_WIDTH = BLOCK_WIDTH * 5
+        love.window.setMode(WINDOW_WIDTH, WINDOW_WIDTH + 100, {resizable=false})
+    elseif changed_mode == "medium" then
+        BLOCK_WIDTH = 100 -- in pixels
+        WINDOW_WIDTH = BLOCK_WIDTH * 8
+        love.window.setMode(WINDOW_WIDTH, WINDOW_WIDTH + 100, {resizable=false})
+    elseif changed_mode == "hard" then
+        BLOCK_WIDTH = 80 -- in pixels
+        WINDOW_WIDTH = BLOCK_WIDTH * 12
+        love.window.setMode(WINDOW_WIDTH, WINDOW_WIDTH + 100, {resizable=false})
+    end
+    block_count = WINDOW_WIDTH / BLOCK_WIDTH
+end
+
+function initial_spawn_pos()
+    pos_x_knight = math.floor((WINDOW_WIDTH / BLOCK_WIDTH) / 2) - 1
+    pos_y_knight = math.floor((WINDOW_WIDTH / BLOCK_WIDTH) / 2)
+    pos_x_enemy = math.floor((WINDOW_WIDTH / BLOCK_WIDTH) / 2)
+    pos_y_enemy = math.floor((WINDOW_WIDTH / BLOCK_WIDTH) / 2)
 end
