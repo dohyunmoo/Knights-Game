@@ -27,6 +27,13 @@ function reset_game()
     shake_time = 0
     shake_x = 0
 
+    X, Y = 0, 0
+
+    PREV_PRESSED = ''
+    CURRENT_COMBINATION = "nomove"
+    UPDATE = false
+    SHAKE = false
+
     math.randomseed(os.time()) -- generate random number based on current time
 end
 

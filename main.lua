@@ -1,12 +1,6 @@
 require("game/util")
+-- require("game/start")
 require("conf")
-
-X, Y = 0, 0
-
-PREV_PRESSED = ''
-CURRENT_COMBINATION = "nomove"
-UPDATE = false
-SHAKE = false
 
 BLOCK_WIDTH = 100 -- in pixels
 
