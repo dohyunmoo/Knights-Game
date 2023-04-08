@@ -1,3 +1,4 @@
+love.handlers = require "love.handlers"
 require("conf")
 
 local game_screen = require("game/game")
@@ -29,3 +30,5 @@ function love.handlers.switchScreen(nextScreenName)
     current = _G[nextScreenName]
     current.load()
   end
+
+love.handlers.register("switchScreen", love.handlers.switchScreen)
