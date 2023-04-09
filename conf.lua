@@ -6,4 +6,5 @@ function love.conf(t)
     t.window.height = BASE_WINDOW_HEIGHT
     t.window.title = "Knight's Game"
     t.window.resizable = false
+    t.console = false
 end
