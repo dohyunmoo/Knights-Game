@@ -5,27 +5,28 @@ local tenth = WINDOW_WIDTH/10
 
 local easy_button = {
     x = tenth,
-    y = WINDOW_HEIGHT/3,
+    y = WINDOW_HEIGHT/2 - tenth,
     w = 2 * tenth,
     h = 2 * tenth
 }
 
 local medium_button = {
     x = 4 * tenth,
-    y = WINDOW_HEIGHT/3,
+    y = WINDOW_HEIGHT/2 - tenth,
     w = 2 * tenth,
     h = 2 * tenth
 }
 
 local hard_button = {
     x = 7 * tenth,
-    y = WINDOW_HEIGHT/3,
+    y = WINDOW_HEIGHT/2 - tenth,
     w = 2 * tenth,
     h = 2 * tenth
 }
 
 function start_screen.load()
     font = love.graphics.newFont(24)
+    title_font = love.graphics.newFont(76)
 end
 
 function start_screen.update(dt)
@@ -35,7 +36,6 @@ end
 function start_screen.draw()
     love.graphics.setBackgroundColor(white)
 
-    local title_font = love.graphics.newFont(48)
     love.graphics.setFont(title_font)
     love.graphics.setColor(black)
     love.graphics.printf("Knight's Game", 0, 2*tenth, WINDOW_WIDTH, "center")
