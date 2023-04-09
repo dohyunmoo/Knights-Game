@@ -14,21 +14,16 @@ DIRECTIONS = {
 }
 
 function game_screen.load()
-    load_image()
-    reset_game()
+    -- load_image()
+    -- reset_game()
 
-    font = love.graphics.newFont(24)
+    -- font = love.graphics.newFont(24)
 
-    white = {1, 1, 1}
-    black = {0, 0, 0}
-    brown = {0.6, 0.4, 0.2}
-    yellow = {1, 1, 0}
-
-    -- set the background color
-    love.graphics.setBackgroundColor(white)
+    -- -- set the background color
+    -- love.graphics.setBackgroundColor(white)
   
-    -- set the text color
-    love.graphics.setColor(black)
+    -- -- set the text color
+    -- love.graphics.setColor(black)
 end
 
 function game_screen.update(dt)

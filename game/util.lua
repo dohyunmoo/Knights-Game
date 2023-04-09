@@ -4,6 +4,13 @@ WINDOW_WIDTH = BASE_WINDOW_WIDTH
 WINDOW_HEIGHT = BASE_WINDOW_HEIGHT
 BASE_BLOCK_WIDTH = 100
 
+font_size = 24
+
+white = {1, 1, 1}
+black = {0, 0, 0}
+brown = {0.6, 0.4, 0.2}
+yellow = {1, 1, 0}
+
 function reset_timer()
     if score < 5 then
         MAX_TIME_CURRENT_ROUND = 10
