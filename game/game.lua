@@ -61,7 +61,7 @@ function game_screen.update(dt)
 end
 
 function game_screen.draw()
-    love.graphics.clear()
+    love.graphics.setBackgroundColor(black)
     love.graphics.setFont(font)
     
     for i = 0, block_count - 1 do

@@ -7,14 +7,18 @@ function init()
     
     font_size = 24
     
-    white = {1, 1, 1}
     black = {0, 0, 0}
-    brown = {0.6, 0.4, 0.2}
-    yellow = {1, 1, 0}
+    white = {tonumber("ff", 16)/255, tonumber("ff", 16)/255, tonumber("ff", 16)/255}
+    yellow = {tonumber("ff", 16)/255, tonumber("dd", 16)/255, tonumber("00", 16)/255}
+    blue = {tonumber("0a", 16)/255, tonumber("11", 16)/255, tonumber("72", 16)/255}
+    sky_blue = {tonumber("63", 16)/255, tonumber("c5", 16)/255, tonumber("da", 16)/255}
+    red = {tonumber("e3", 16)/255, tonumber("24", 16)/255, tonumber("2b", 16)/255}
     
     highscore_easy = 0
     highscore_medium = 0
     highscore_hard = 0
+
+    isInfo = false
 end
 
 function reset_timer()
@@ -62,6 +66,8 @@ function reset_game()
     WINDOW_WIDTH = BASE_WINDOW_WIDTH
     WINDOW_HEIGHT = BASE_WINDOW_HEIGHT
 
+    isInfo = false
+
     math.randomseed(os.time()) -- generate random number based on current time
 end
 
@@ -85,18 +91,18 @@ function load_image()
 end
 
 function random_enemy_generator()
-    local rand_num = math.random(0, 5)
-    if rand_num == 0 then
+    local rand_num = math.random(0, 15)
+    if rand_num >= 0 and rand_num < 8 then
         return image_pawn
-    elseif rand_num == 1 then
+    elseif 8 <= rand_num and rand_num < 10  then
         return image_bknight
-    elseif rand_num == 2 then
+    elseif 10 <= rand_num and rand_num < 12 then
         return image_bishop
-    elseif rand_num == 3 then
+    elseif 12 <= rand_num and rand_num < 14 then
         return image_rook
-    elseif rand_num == 4 then
+    elseif rand_num == 14 then
         return image_queen
-    elseif rand_num == 5 then
+    elseif rand_num == 15 then
         return image_king
     end
 end

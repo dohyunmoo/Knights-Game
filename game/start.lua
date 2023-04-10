@@ -24,9 +24,17 @@ local hard_button = {
     h = 2 * tenth
 }
 
+local info_button = {
+    x = WINDOW_WIDTH - tenth,
+    y = tenth/2,
+    r = tenth/4
+}
+
 function start_screen.load()
-    font = love.graphics.newFont(24)
-    title_font = love.graphics.newFont(76)
+    font = love.graphics.newFont("assets/NotoMono.ttf", 24)
+    title_font = love.graphics.newFont("assets/NotoMono.ttf", 76)
+    info_font = love.graphics.newFont(tenth/4)
+    info_message_font = love.graphics.newFont(tenth/5)
 end
 
 function start_screen.update(dt)
@@ -49,18 +57,26 @@ function start_screen.draw()
     love.graphics.printf("5x5", easy_button.x, easy_button.y + (easy_button.h/2 - font_size/2), easy_button.w, "center")
     love.graphics.printf("8x8", medium_button.x, medium_button.y + (medium_button.h/2 - font_size/2), medium_button.w, "center")
     love.graphics.printf("12x12", hard_button.x, hard_button.y + (hard_button.h/2 - font_size/2), hard_button.w, "center")
-
+    
     love.graphics.setColor(black)
     love.graphics.printf("High Scores", 0, WINDOW_HEIGHT/2 + tenth, WINDOW_WIDTH, "center")
-
+    
     love.graphics.printf(tostring(highscore_easy), easy_button.x, WINDOW_HEIGHT/2 + 2*tenth, easy_button.w, "center")
     love.graphics.printf(tostring(highscore_medium), medium_button.x, WINDOW_HEIGHT/2 + 2*tenth, medium_button.w, "center")
     love.graphics.printf(tostring(highscore_hard), hard_button.x, WINDOW_HEIGHT/2 + 2*tenth, hard_button.w, "center")
+    
+    love.graphics.setColor(blue)
+    love.graphics.circle("fill", info_button.x + info_button.r, info_button.y + info_button.r, info_button.r)
+    love.graphics.setFont(info_font)
+    love.graphics.setColor(white)
+    love.graphics.printf('i', info_button.x + info_button.r/2, info_button.y + info_button.r/2, info_button.r, "center")
 end
 
 function start_screen.mousepressed(x, y, button)
-    if not isGameStarted then
-        if button == 1 and x >= easy_button.x and x <= easy_button.x + easy_button.w and y >= easy_button.y and y <= easy_button.y + easy_button.h then
+    if isGameStarted == false then
+        if button == 1 and x >= info_button.x - info_button.r and x <= info_button.x + info_button.r and y >= info_button.y - info_button.r and y <= info_button.y + info_button.r then
+            isInfo = true
+        elseif button == 1 and x >= easy_button.x and x <= easy_button.x + easy_button.w and y >= easy_button.y and y <= easy_button.y + easy_button.h then
             mode_change("easy")
         elseif button == 1 and x >= medium_button.x and x <= medium_button.x + medium_button.w and y >= medium_button.y and y <= medium_button.y + medium_button.h then
             mode_change("medium")
