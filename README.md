@@ -8,7 +8,7 @@ Features:
 - [x] Gradually decreasing timer
 - [x] Different types of enemy
 - [x] Different board types (5x5, 8x8, 12x12)
-- [ ] High Scores for each board types
+- [X] High Scores for each board types
 - [ ] Sound Effects
 - [ ] Multiplayer Mode
-- [ ] Information Page
+- [X] Information Page
