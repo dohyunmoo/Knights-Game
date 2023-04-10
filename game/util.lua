@@ -1,15 +1,21 @@
 require("conf")
 
-WINDOW_WIDTH = BASE_WINDOW_WIDTH
-WINDOW_HEIGHT = BASE_WINDOW_HEIGHT
-BASE_BLOCK_WIDTH = 100
-
-font_size = 24
-
-white = {1, 1, 1}
-black = {0, 0, 0}
-brown = {0.6, 0.4, 0.2}
-yellow = {1, 1, 0}
+function init()
+    WINDOW_WIDTH = BASE_WINDOW_WIDTH
+    WINDOW_HEIGHT = BASE_WINDOW_HEIGHT
+    BASE_BLOCK_WIDTH = 100
+    
+    font_size = 24
+    
+    white = {1, 1, 1}
+    black = {0, 0, 0}
+    brown = {0.6, 0.4, 0.2}
+    yellow = {1, 1, 0}
+    
+    highscore_easy = 0
+    highscore_medium = 0
+    highscore_hard = 0
+end
 
 function reset_timer()
     if score < 5 then
@@ -106,6 +112,14 @@ function captured()
         pos_x_enemy = math.random(0, WINDOW_WIDTH / BLOCK_WIDTH - 1)
         pos_y_enemy = math.random(1, WINDOW_WIDTH / BLOCK_WIDTH)
     end
+
+    if mode == "easy" and score >= highscore_easy then
+        highscore_easy = score
+    elseif mode == "medium" and score >= highscore_medium then
+        highscore_medium = score
+    elseif mode == "hard" and score >= highscore_hard then
+        highscore_hard = score
+    end
 end
 
 function mode_change(changed_mode)
@@ -122,7 +136,11 @@ function mode_change(changed_mode)
         WINDOW_WIDTH = BLOCK_WIDTH * 12
         love.window.setMode(WINDOW_WIDTH, WINDOW_WIDTH + 100, {resizable=false})
     end
+    isGameStarted = true
+    time_left = MAX_TIME_CURRENT_ROUND
+    initial_spawn_pos()
     block_count = WINDOW_WIDTH / BLOCK_WIDTH
+    mode = changed_mode
 end
 
 function initial_spawn_pos()

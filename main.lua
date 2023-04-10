@@ -1,13 +1,15 @@
 require("game/util")
 
-local game_screen = require("game/game")
-local start_screen = require("game/start")
-
-local current = start_screen
-
 function love.load()
+    init()
     load_image()
     reset_game()
+    
+    game_screen = require("game/game")
+    start_screen = require("game/start")
+    
+    current = start_screen
+
     current.load()
 end
 

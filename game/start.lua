@@ -5,21 +5,21 @@ local tenth = WINDOW_WIDTH/10
 
 local easy_button = {
     x = tenth,
-    y = WINDOW_HEIGHT/2 - tenth,
+    y = WINDOW_HEIGHT/2 - 1.5*tenth,
     w = 2 * tenth,
     h = 2 * tenth
 }
 
 local medium_button = {
     x = 4 * tenth,
-    y = WINDOW_HEIGHT/2 - tenth,
+    y = WINDOW_HEIGHT/2 - 1.5*tenth,
     w = 2 * tenth,
     h = 2 * tenth
 }
 
 local hard_button = {
     x = 7 * tenth,
-    y = WINDOW_HEIGHT/2 - tenth,
+    y = WINDOW_HEIGHT/2 - 1.5*tenth,
     w = 2 * tenth,
     h = 2 * tenth
 }
@@ -49,6 +49,13 @@ function start_screen.draw()
     love.graphics.printf("5x5", easy_button.x, easy_button.y + (easy_button.h/2 - font_size/2), easy_button.w, "center")
     love.graphics.printf("8x8", medium_button.x, medium_button.y + (medium_button.h/2 - font_size/2), medium_button.w, "center")
     love.graphics.printf("12x12", hard_button.x, hard_button.y + (hard_button.h/2 - font_size/2), hard_button.w, "center")
+
+    love.graphics.setColor(black)
+    love.graphics.printf("High Scores", 0, WINDOW_HEIGHT/2 + tenth, WINDOW_WIDTH, "center")
+
+    love.graphics.printf(tostring(highscore_easy), easy_button.x, WINDOW_HEIGHT/2 + 2*tenth, easy_button.w, "center")
+    love.graphics.printf(tostring(highscore_medium), medium_button.x, WINDOW_HEIGHT/2 + 2*tenth, medium_button.w, "center")
+    love.graphics.printf(tostring(highscore_hard), hard_button.x, WINDOW_HEIGHT/2 + 2*tenth, hard_button.w, "center")
 end
 
 function start_screen.mousepressed(x, y, button)
@@ -60,9 +67,6 @@ function start_screen.mousepressed(x, y, button)
         elseif button == 1 and x >= hard_button.x and x <= hard_button.x + hard_button.w and y >= hard_button.y and y <= hard_button.y + hard_button.h then
             mode_change("hard")
         end
-        isGameStarted = true
-        time_left = MAX_TIME_CURRENT_ROUND
-        initial_spawn_pos()
     end
 end
 
